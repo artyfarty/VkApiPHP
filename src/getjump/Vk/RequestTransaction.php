@@ -66,6 +66,8 @@ class RequestTransaction
      * @var bool|string
      */
     private $noHttpsSecret = false;
+    
+    private $offsetArg = "offset";
 
     /**
      * @param string      $methodName
@@ -90,17 +92,19 @@ class RequestTransaction
      *
      * @return BatchTransaction
      */
-    public function batch($count = 10)
+    public function batch($count = 10, $offsetArg = "offset")
     {
+        $this->offsetArg = $offsetArg;
+        
         $this->args['count'] = $count;
-        $this->args['offset'] = 0;
+        $this->args[$this->offsetArg] = 0;
 
         return new BatchTransaction($this, $count);
     }
 
     public function incrementOffset($offset = 0)
     {
-        isset($this->args['offset']) ? $this->args['offset'] += $offset : $this->args['offset'] = 0;
+        isset($this->args[$this->offsetArg]) ? $this->args[$this->offsetArg] += $offset : $this->args[$this->offsetArg] = 0;
     }
 
     /**
